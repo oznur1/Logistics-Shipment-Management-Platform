@@ -1,0 +1,26 @@
+
+# Backend - .NET
+backend/**/bin/
+backend/**/obj/
+backend/**/Properties/
+backend/**/appsettings.Development.json
+
+# Frontend - Angular
+frontend/**/node_modules/
+frontend/**/dist/
+frontend/**/.angular/
+
+# README dosyalarını yükleme
+backend/ShipmentService/README.md
+frontend/logistics-ui/README.md
+
+# Hassas bilgiler
+.env
+.env.*
+!.env.example
+
+# IDE ve işletim sistemi dosyaları
+.vscode/
+.vs/
+.DS_Store
+Thumbs.db
