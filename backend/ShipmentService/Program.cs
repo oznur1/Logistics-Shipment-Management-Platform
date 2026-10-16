@@ -1,22 +1,38 @@
+
 using Microsoft.EntityFrameworkCore;
 using ShipmentService.Data;
+using ShipmentService.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//ASP.NET Core'a, AppDbContext sınıfını kullanarak SQL Server veritabanına nasıl bağlanacağını belirlemek.
-builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection")
-));
+// SQL Server veritabanı bağlantısı
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
-// Add services to the container.
+// Controller ve JSON serileştirme ayarları
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler =
+            ReferenceHandler.IgnoreCycles;
+    });
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Shipment Service bağımlılık kaydı
+builder.Services.AddScoped<
+    IShipmentService,
+    ShipmentService.Services.ShipmentService
+>();
+
+// OpenAPI yapılandırması
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Development ortamında OpenAPI belgesi
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
