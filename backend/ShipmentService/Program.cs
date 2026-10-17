@@ -6,6 +6,18 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Angular uygulaması için CORS izni
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularDevelopment", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // SQL Server veritabanı bağlantısı
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
@@ -30,6 +42,7 @@ builder.Services.AddScoped<
 // OpenAPI yapılandırması
 builder.Services.AddOpenApi();
 
+// Uygulama burada oluşturuluyor
 var app = builder.Build();
 
 // Development ortamında OpenAPI belgesi
@@ -39,6 +52,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// CORS middleware
+app.UseCors("AngularDevelopment");
 
 app.UseAuthorization();
 

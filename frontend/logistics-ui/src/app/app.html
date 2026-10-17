@@ -1,3 +1,59 @@
-<h1>
-  selam
-</h1>
+
+<main>
+  <header>
+    <h1>Logistics & Shipment Management Platform</h1>
+    <p>Sevkiyat Yönetim Paneli</p>
+  </header>
+
+  @if (isLoading()) {
+    <p class="loading">Sevkiyatlar yükleniyor...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else {
+    <section>
+      <h2>Sevkiyatlar</h2>
+
+      <p>Toplam sevkiyat: {{ shipments().length }}</p>
+
+      @if (shipments().length === 0) {
+        <p>Henüz sevkiyat kaydı bulunmuyor.</p>
+      } @else {
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Takip Numarası</th>
+                <th>Çıkış Adresi</th>
+                <th>Varış Adresi</th>
+                <th>Durum</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Tahmini Teslimat</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (shipment of shipments(); track shipment.id) {
+                <tr>
+                  <td>{{ shipment.id }}</td>
+                  <td>{{ shipment.trackingNumber }}</td>
+                  <td>{{ shipment.originAddress }}</td>
+                  <td>{{ shipment.destinationAddress }}</td>
+                  <td>{{ shipment.status }}</td>
+                  <td>{{ shipment.createdAt | date: 'dd.MM.yyyy HH:mm' }}</td>
+                  <td>
+                    @if (shipment.estimatedDeliveryDate) {
+                      {{ shipment.estimatedDeliveryDate | date: 'dd.MM.yyyy' }}
+                    } @else {
+                      Belirtilmedi
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</main>
