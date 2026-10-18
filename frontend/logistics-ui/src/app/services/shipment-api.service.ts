@@ -1,4 +1,3 @@
-
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -14,9 +13,11 @@ export interface CreateShipmentRequest {
 export interface UpdateShipmentRequest {
   originAddress: string;
   destinationAddress: string;
+  customerId: number;
   estimatedDeliveryDate: string | null;
   status: string;
 }
+
 
 @Injectable({
   providedIn: 'root',
@@ -26,19 +27,16 @@ export class ShipmentApiService {
 
   private readonly apiUrl = 'http://localhost:5068/api/Shipment';
 
-  // Tüm sevkiyatları getir
   getShipments(): Observable<Shipment[]> {
     return this.http.get<Shipment[]>(this.apiUrl);
   }
 
-  // Yeni sevkiyat oluştur
   createShipment(
     shipment: CreateShipmentRequest,
   ): Observable<Shipment> {
     return this.http.post<Shipment>(this.apiUrl, shipment);
   }
 
-  // Mevcut sevkiyatı güncelle
   updateShipment(
     id: number,
     shipment: UpdateShipmentRequest,
@@ -47,5 +45,9 @@ export class ShipmentApiService {
       `${this.apiUrl}/${id}`,
       shipment,
     );
+  }
+
+  deleteShipment(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -1,0 +1,84 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">LS</div>
+
+      <h1>Logistics & Shipment Management Platform</h1>
+
+      <p>
+        Sevkiyat yönetim sistemine giriş yapın.
+      </p>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="submit()"
+      class="login-form"
+    >
+      <div class="form-group">
+        <label for="email">E-posta</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="E-posta adresinizi girin"
+          autocomplete="email"
+        />
+
+        @if (
+          loginForm.controls.email.touched &&
+          loginForm.controls.email.invalid
+        ) {
+          <small class="field-error">
+            Geçerli bir e-posta adresi girin.
+          </small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Parola</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Parolanızı girin"
+          autocomplete="current-password"
+        />
+
+        @if (
+          loginForm.controls.password.touched &&
+          loginForm.controls.password.invalid
+        ) {
+          <small class="field-error">
+            Parola en az 6 karakter olmalıdır.
+          </small>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <div class="error-message">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          Giriş yapılıyor...
+        } @else {
+          Giriş Yap
+        }
+      </button>
+    </form>
+
+    <div class="test-info">
+      <strong>Test hesabı</strong>
+      <span>test.user@example.com</span>
+      <span>TestPassword123!</span>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
+import { RouterOutlet } from '@angular/router';
 
 import { Shipment } from './models/shipment.model';
 import {
@@ -16,7 +17,8 @@ import {
 
 @Component({
   selector: 'app-root',
-  imports: [DatePipe, ReactiveFormsModule],
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -260,12 +262,13 @@ export class App implements OnInit {
         (shipment) => shipment.id === shipmentId,
       );
 
-      const request: UpdateShipmentRequest = {
-        originAddress,
-        destinationAddress,
-        estimatedDeliveryDate,
-        status: currentShipment?.status ?? 'Pending',
-      };
+     const request: UpdateShipmentRequest = {
+  originAddress,
+  destinationAddress,
+  customerId: currentShipment?.customerId ?? Number(formValue.customerId),
+  estimatedDeliveryDate,
+  status: currentShipment?.status ?? 'Pending',
+};
 
       this.shipmentApiService
         .updateShipment(shipmentId, request)

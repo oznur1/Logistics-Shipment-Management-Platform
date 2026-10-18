@@ -1,12 +1,16 @@
 
-using Microsoft.EntityFrameworkCore;
-using ShipmentService.Data;
-using ShipmentService.Services;
+using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using ShipmentService.Data;
+using ShipmentService.Entities;
+using ShipmentService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Angular uygulaması için CORS izni
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularDevelopment", policy =>
@@ -18,14 +22,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-// SQL Server veritabanı bağlantısı
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
 
-// Controller ve JSON serileştirme ayarları
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -33,19 +35,54 @@ builder.Services.AddControllers()
             ReferenceHandler.IgnoreCycles;
     });
 
-// Shipment Service bağımlılık kaydı
 builder.Services.AddScoped<
     IShipmentService,
     ShipmentService.Services.ShipmentService
 >();
 
-// OpenAPI yapılandırması
+builder.Services.AddScoped<
+    IPasswordHasher<AppUser>,
+    PasswordHasher<AppUser>
+>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException(
+        "JWT anahtarı User Secrets içinde bulunamadı.");
+
+var signingKey = new SymmetricSecurityKey(
+    Convert.FromBase64String(jwtKey));
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromSeconds(30),
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+
+            NameClaimType = System.Security.Claims.ClaimTypes.Name,
+            RoleClaimType = System.Security.Claims.ClaimTypes.Role
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddOpenApi();
 
-// Uygulama burada oluşturuluyor
 var app = builder.Build();
 
-// Development ortamında OpenAPI belgesi
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -53,9 +90,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// CORS middleware
 app.UseCors("AngularDevelopment");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

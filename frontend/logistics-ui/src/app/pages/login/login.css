@@ -1,0 +1,136 @@
+:host {
+  display: block;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #f1f6fd;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 36px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px rgba(23, 59, 99, 0.12);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #173b63;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.login-header h1 {
+  margin: 0;
+  color: #173767;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.login-header p {
+  margin: 10px 0 0;
+  color: #68788a;
+  font-size: 14px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  color: #26384a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #ccd7e3;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #173b63;
+}
+
+.field-error {
+  color: #c0392b;
+  font-size: 12px;
+}
+
+.error-message {
+  padding: 12px;
+  border-radius: 8px;
+  background: #fdecec;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.login-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 13px 16px;
+  background: #173b63;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-form button:hover:not(:disabled) {
+  background: #102d4c;
+}
+
+.login-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.test-info {
+  margin-top: 24px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 8px;
+  background: #f1f6fd;
+  color: #526477;
+  font-size: 12px;
+}
+
+.test-info strong {
+  color: #173767;
+  font-size: 13px;
+}

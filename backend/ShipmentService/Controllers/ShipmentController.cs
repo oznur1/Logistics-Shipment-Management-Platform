@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShipmentService.DTOs;
 using ShipmentService.Services;
@@ -7,6 +8,7 @@ namespace ShipmentService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ShipmentController : ControllerBase
 {
     private readonly IShipmentService _shipmentService;
